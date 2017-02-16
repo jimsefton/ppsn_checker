@@ -28,13 +28,18 @@ document.getElementById('ppsn-output').innerHTML='';
     if (  ppsRE.test( ppsnval) ) {
     var letter = ppsnval.charCodeAt(7) & 0x1F;
     var lastletter = ppsnval.charCodeAt(8) & 0x1F;
+    var ppsnlength = ppsnval.length;
+    
+    if(lastletter==20||lastletter==24){ppsnlength=8;} // cope with old val of X or T
+    
     var sum = 0;
     for ( var c = 0; c < 7; ++c )
     {
         sum += Number(ppsnval.charAt(c)) * (8 - c); 
     }
-    
+    if(ppsnlength==9){
     sum +=(lastletter*9);
+    }
     //alert(sum % 23);
     var outpt = (sum % 23 == letter % 23);
    
