@@ -15,6 +15,7 @@ color:green;
 </head>
 <body>
 Valid example: 1234567TW<br>
+1234567FA<br>
 <br>
 <script>
 function ppsnvalid()
@@ -33,7 +34,8 @@ document.getElementById('ppsn-output').innerHTML='';
         sum += Number(ppsnval.charAt(c)) * (8 - c); 
     }
     
-    sum +=lastletter;
+    sum +=(lastletter*9);
+    //alert(sum % 23);
     var outpt = (sum % 23 == letter % 23);
    
     if(outpt){
