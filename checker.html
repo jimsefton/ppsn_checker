@@ -1,0 +1,51 @@
+<html>
+<head>
+<style>
+body{
+font-family:arial;
+}
+#ppsn{
+float:left;
+}
+#ppsn-output{
+float:left;
+color:green;
+}
+</style>
+</head>
+<body>
+Valid example: 1234567TW<br>
+<br>
+<script>
+function ppsnvalid()
+{
+document.getElementById('ppsn-output').innerHTML='';
+   
+    var ppsRE = /^\d{7,7}[a-w]{1,2}$/i;
+    var ppsnval=document.getElementById("ppsn").value;
+    
+    if (  ppsRE.test( ppsnval) ) {
+    var letter = ppsnval.charCodeAt(7) & 0x1F;
+    var lastletter = ppsnval.charCodeAt(8) & 0x1F;
+    var sum = 0;
+    for ( var c = 0; c < 7; ++c )
+    {
+        sum += Number(ppsnval.charAt(c)) * (8 - c); 
+    }
+    
+    sum +=lastletter;
+    var outpt = (sum % 23 == letter % 23);
+   
+    if(outpt){
+    document.getElementById('ppsn-output').innerHTML=' valid';
+    }; 
+};
+}
+
+</script>
+
+<input id="ppsn" type="text" name="ppsn" onkeyup="ppsnvalid()"><div id="ppsn-output"></div><br>
+
+</body>
+</html>
+
