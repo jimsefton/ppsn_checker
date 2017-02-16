@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Validate PPS</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<style type="text/css">
+		div.valid
+		{
+			color: Green;
+		}
+		
+		div.notValid
+		{
+			color: Red;
+		}
+	</style>
+</head>
+<body>
+<br>
+Example valid numbers:<br>
+<br>
+1234567TW<br>
+1234567FA<br>
+<br>
+<br>
+
+Enter PPSN : <input type="text" id="inputPPS" /><br />
+	<div id="resultDisplay">
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	function ValidatePPS(value) {
+		var validationRegex = /^(\d{7})([A-Z]{1,2})$/i;
+
+		if (!validationRegex.test(value))
+			return "The format of the provided PPSN is invalid";
+
+		var numericPart = RegExp.$1;
+		var checksumCharacter = RegExp.$2;
+
+		var multiplyingFactor = 8;
+		var sum = 0;
+
+		for (var i = 0; i < numericPart.length; i++) {
+			sum += numericPart[i] * multiplyingFactor--;
+		}
+
+		if (RegExp.$2[1]) {
+			sum += (RegExp.$2[1].toUpperCase().charCodeAt(0) - 64) * 9;
+		}
+
+		var checksum = sum % 23;
+
+		if (checksum + 64 === checksumCharacter.charCodeAt(0))
+			return "The provided PPSN is valid!";
+		else
+			return "The provided PPSN is invalid! The check character should be " + String.fromCharCode(checksum + 64);
+	}
+
+	$(function () {
+		var inputPPSElement = $("input#inputPPS");
+		var resultElement = $("div#resultDisplay");
+		inputPPSElement.change(function () {
+			resultElement.empty();
+			resultElement.removeClass("valid");
+			resultElement.removeClass("notValid");
+			var result = ValidatePPS(inputPPSElement.val());
+			if (result.indexOf("check") >= 0) {
+				resultElement.html(result);
+				resultElement.addClass("notValid");
+			}
+			else {
+				resultElement.html(result);
+				resultElement.addClass("valid");
+			}
+		});
+	});
+</script>
